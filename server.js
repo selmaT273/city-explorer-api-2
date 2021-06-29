@@ -1,9 +1,13 @@
 'use strict';
 
 const express = require('express');
+const cors = require('cors');
+
 require('dotenv').config();
 
 const app = express();
+app.use(cors());
+
 const PORT = process.env.PORT || 3001;
 
 app.get('/', (request, response) => {
@@ -13,7 +17,7 @@ app.get('/', (request, response) => {
 const weatherData = require('./data/weather.json');
 
 app.get('/weather', (request, response) => {
-  response.send(weatherData);
+  response.json(weatherData);
 });
 
 
