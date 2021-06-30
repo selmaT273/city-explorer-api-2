@@ -17,8 +17,13 @@ app.get('/', (request, response) => {
 const weatherData = require('./data/weather.json');
 
 app.get('/weather', (request, response) => {
-  response.json(weatherData);
+  const allForecasts = weatherData.data.map(day => new Forecast(day));
+  response.send(allForecasts);
 });
 
+function Forecast(day) {
+  this.date = day.datetime;
+  this.description = day.weather.description;
+}
 
 app.listen(PORT, () => console.log(`app is listening on port ${PORT}`));
