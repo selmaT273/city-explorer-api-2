@@ -16,18 +16,22 @@ app.get('/', (request, response) => {
   response.send('helllllloooo!');
 });
 
-app.get('/weather', (request, response) => {
-  try {
-    getWeather(request.query);
-    const allForecasts = weatherData.data.map(day => new Forecast(day));
-    response.send(allForecasts);
-  } catch(err) {
-    handleError(err, response);
-  }
-});
+app.get('/weather', getWeather);
 
 function getWeather(request, response) {
-  console.log(request);
+  const url = 'https://api.openweathermap.org/data/2.5/onecall';
+  const query = {
+    appid: process.env.WEATHER_API_KEY,
+    lat: request.query.lat,
+    lon: request.query.lon,
+  }
+  console.log(query);
+  superagent.get(url)
+    .query(query)
+    .then(weatherResponse => {
+      console.log(weatherResponse.body);
+      response.status(200).send(weatherResponse.body);
+    })
 }
 
 function Forecast(day) {
