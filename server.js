@@ -18,7 +18,7 @@ app.get('/', (request, response) => {
 app.get('/weather', (request, response) => {
   try {
     const allForecasts = weatherData.data.map(day => new Forecast(day));
-    response.send(allForecasts);
+    response.send(alForecasts);
   } catch(err) {
     handleError(err, response);
   }
@@ -30,7 +30,7 @@ function Forecast(day) {
 }
 
 function handleError(err, response) {
-  response.send('Whoops. Internal error.');
+  response.status(500).send('Whoops. Internal error.');
 }
 
 app.listen(PORT, () => console.log(`app is listening on port ${PORT}`));
