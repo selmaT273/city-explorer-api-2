@@ -2,6 +2,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const superagent = require('superagent');
 
 require('dotenv').config();
 
@@ -17,12 +18,17 @@ app.get('/', (request, response) => {
 
 app.get('/weather', (request, response) => {
   try {
+    getWeather(request.query);
     const allForecasts = weatherData.data.map(day => new Forecast(day));
     response.send(allForecasts);
   } catch(err) {
     handleError(err, response);
   }
 });
+
+function getWeather(request, response) {
+  console.log(request);
+}
 
 function Forecast(day) {
   this.date = day.datetime;
