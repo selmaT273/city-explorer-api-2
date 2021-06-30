@@ -18,7 +18,7 @@ app.get('/', (request, response) => {
 app.get('/weather', (request, response) => {
   try {
     const allForecasts = weatherData.data.map(day => new Forecast(day));
-    response.send(alForecasts);
+    response.send(allForecasts);
   } catch(err) {
     handleError(err, response);
   }
