@@ -29,8 +29,8 @@ function getWeather(request, response) {
   superagent.get(url)
     .query(query)
     .then(weatherResponse => {
-      console.log(weatherResponse.body.daily.map(day => new Forecast(day)));
-      response.status(200).send(weatherResponse.body);
+      const dailyForecasts = weatherResponse.body.daily.map(day => new Forecast(day));
+      response.status(200).send(dailyForecasts);
     })
 }
 
@@ -39,7 +39,6 @@ function Forecast(day) {
   // QUESTION: should i do this date manipulation in the Forecast constructor or in the front end?
   const milli = day.dt * 1000;
   const dateObject = new Date(milli);
-  console.log(dateObject.toLocaleDateString());
 
   this.date = dateObject.toLocaleDateString();
   this.description = day.weather[0].description;
