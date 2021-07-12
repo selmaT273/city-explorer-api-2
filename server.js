@@ -18,6 +18,8 @@ app.get('/', (request, response) => {
 
 app.get('/weather', getWeather);
 
+app.get('/movies', getMovies);
+
 function getWeather(request, response) {
   const url = 'https://api.openweathermap.org/data/2.5/onecall';
   const query = {
@@ -35,7 +37,17 @@ function getWeather(request, response) {
 }
 
 function getMovies(request, response) {
-
+  const url = 'https://api.themoviedb.org/3/search/movie';
+  const query = {
+    api_key: process.env.MOVIE_API_KEY,
+    query: 'seattle',
+  }
+  superagent.get(url)
+    .query(query)
+    .then(movieResponse => {
+      console.log(movieResponse.body);
+      response.status(200)
+    })
 }
 
 function Forecast(day) {
