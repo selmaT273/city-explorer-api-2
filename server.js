@@ -34,13 +34,16 @@ function getWeather(request, response) {
     })
 }
 
+function getMovies(request, response) {
+
+}
+
 function Forecast(day) {
   // Assuming we are passing in weatherResponse.body.daily[i] as the day
-  // QUESTION: should i do this date manipulation in the Forecast constructor or in the front end?
   const milli = day.dt * 1000;
   const dateObject = new Date(milli);
-
-  this.date = dateObject.toLocaleDateString();
+  console.log(dateObject.toISOString());
+  this.date = dateObject.toISOString().substr(0, 10);
   this.description = day.weather[0].description;
 }
 
