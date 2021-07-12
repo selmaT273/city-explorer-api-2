@@ -45,8 +45,7 @@ function getMovies(request, response) {
   superagent.get(url)
     .query(query)
     .then(movieResponse => {
-      console.log(movieResponse.body);
-      response.status(200).send(movieResponse.body);
+      response.status(200).send(movieResponse.body.results);
     })
 }
 
