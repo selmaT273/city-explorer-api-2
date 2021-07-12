@@ -40,13 +40,13 @@ function getMovies(request, response) {
   const url = 'https://api.themoviedb.org/3/search/movie';
   const query = {
     api_key: process.env.MOVIE_API_KEY,
-    query: 'seattle',
+    query: request.query.search_query,
   }
   superagent.get(url)
     .query(query)
     .then(movieResponse => {
       console.log(movieResponse.body);
-      response.status(200)
+      response.status(200).send(movieResponse.body);
     })
 }
 
