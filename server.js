@@ -26,7 +26,6 @@ function getWeather(request, response) {
     lat: request.query.lat,
     lon: request.query.lon,
   }
-  console.log(query);
   superagent.get(url)
     .query(query)
     .then(weatherResponse => {
@@ -45,7 +44,6 @@ function getMovies(request, response) {
     .query(query)
     .then(movieResponse => {
       const movies = movieResponse.body.results.map(movie => new Movie(movie));
-      console.log(movies);
       response.status(200).send(movies);
     })
 }
@@ -64,13 +62,12 @@ function Forecast(day) {
   // Assuming we are passing in weatherResponse.body.daily[i] as the day
   const milli = day.dt * 1000;
   const dateObject = new Date(milli);
-  console.log(dateObject.toISOString());
   this.date = dateObject.toISOString().substr(0, 10);
   this.description = day.weather[0].description;
 }
 
-function handleError(err, response) {
-  response.status(500).send('Whoops. Internal error.');
-}
+// function handleError(err, response) {
+//   response.status(500).send('Whoops. Internal error.');
+// }
 
 app.listen(PORT, () => console.log(`app is listening on port ${PORT}`));
