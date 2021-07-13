@@ -10,7 +10,6 @@ const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 3001;
-const weatherData = require('./data/weather.json');
 
 app.get('/', (request, response) => {
   response.send('helllllloooo!');
@@ -45,8 +44,20 @@ function getMovies(request, response) {
   superagent.get(url)
     .query(query)
     .then(movieResponse => {
-      response.status(200).send(movieResponse.body.results);
+      const movies = movieResponse.body.results.map(movie => new Movie(movie));
+      console.log(movies);
+      response.status(200).send(movies);
     })
+}
+
+function Movie(movie) {
+  this.title = movie.original_title;
+  this.overview = movie.overview;
+  this.average_votes = movie.vote_average;
+  this.total_votes = movie.vote_count;
+  this.image_url = movie.poster_path;
+  this.popularity = movie.popularity;
+  this.released_on = movie.release_date;
 }
 
 function Forecast(day) {
