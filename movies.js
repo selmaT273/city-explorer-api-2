@@ -4,7 +4,7 @@ const cache = {};
 
 function getMovies(request, response) {
   const key = request.query.search_query;
-  if(!cache[key]) {
+  if(!cache[key] || (Date.now() - cache[key].timestamp) > 50000) {
     const url = 'https://api.themoviedb.org/3/search/movie';
     const query = {
       api_key: process.env.MOVIE_API_KEY,

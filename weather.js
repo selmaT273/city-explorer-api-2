@@ -3,7 +3,7 @@ const cache = {};
 
 function getWeather(request, response) {
   const key = `weather-${request.query.lat}${request.query.lon}`;
-  if(!cache[key] || (Date.now() - cache[key].timestamp) > 5000){
+  if(!cache[key] || (Date.now() - cache[key].timestamp) > 50000){
     const url = 'https://api.openweathermap.org/data/2.5/onecall';
     const query = {
       appid: process.env.WEATHER_API_KEY,
