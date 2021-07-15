@@ -1,4 +1,5 @@
 const superagent = require('superagent');
+const cache = require('./cache');
 
 function getWeather(request, response) {
   const url = 'https://api.openweathermap.org/data/2.5/onecall';
