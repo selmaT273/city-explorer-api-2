@@ -3,7 +3,7 @@ const cache = {};
 
 function getWeather(request, response) {
   const key = `weather-${request.query.lat}${request.query.lon}`;
-  if(!cache[key]){
+  if(!cache[key] || (Date.now() - cache[key].timestamp) > 5000){
     const url = 'https://api.openweathermap.org/data/2.5/onecall';
     const query = {
       appid: process.env.WEATHER_API_KEY,
@@ -14,12 +14,14 @@ function getWeather(request, response) {
         .query(query)
         .then(weatherResponse => {
           const dailyForecasts = weatherResponse.body.daily.map(day => new Forecast(day));
-          cache[key] = dailyForecasts;
+          cache[key] = {};
+          cache[key].timestamp = Date.now();
+          cache[key].data = dailyForecasts;
           console.log('cache miss');
           response.status(200).send(dailyForecasts);
         })
   } else {
-      let cachedData = cache[key];
+      let cachedData = cache[key].data;
       console.log('Cache hit');
       response.status(200).send(cachedData);
     }
