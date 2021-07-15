@@ -5,7 +5,6 @@ const cors = require('cors');
 const getMovies = require('./movies');
 const getWeather = require('./weather');
 
-
 require('dotenv').config();
 
 const app = express();

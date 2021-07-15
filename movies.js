@@ -1,17 +1,30 @@
 const superagent = require('superagent');
+const cache = {};
 
 function getMovies(request, response) {
-  const url = 'https://api.themoviedb.org/3/search/movie';
-  const query = {
-    api_key: process.env.MOVIE_API_KEY,
-    query: request.query.search_query,
+  const key = request.query.search_query;
+  if(!cache[key] || (Date.now() - cache[key].timestamp) > 50000) {
+    const url = 'https://api.themoviedb.org/3/search/movie';
+    const query = {
+      api_key: process.env.MOVIE_API_KEY,
+      query: request.query.search_query,
+    }
+    superagent.get(url)
+      .query(query)
+      .then(movieResponse => {
+      const movies = movieResponse.body.results.map(movie => new Movie(movie));
+      cache[key] = {};
+      cache[key].timestamp = Date.now();
+      cache[key].data = movies;
+      console.log('movie cache miss');
+      response.status(200).send(movies);
+      })
+  } else {
+    let cachedData = cache[key].data
+    console.log('movie cache hit')
+    response.status(200).send(cachedData);
   }
-  superagent.get(url)
-    .query(query)
-    .then(movieResponse => {
-    const movies = movieResponse.body.results.map(movie => new Movie(movie));
-    response.status(200).send(movies);
-    })
+  
 }
   
 function Movie(movie) {
